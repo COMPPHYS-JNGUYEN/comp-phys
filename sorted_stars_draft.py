@@ -14,8 +14,8 @@ data = [
 ('Ross 154',			9.4,	0.00002,	0.0005),
 ]
 
-SNvD
-SNvAppBr
-SNvAbsBr
+StarName = [i for i in range
+#SNvAppBr = 
+#SNvAbsBr = 
 #pprint.pprint(data)
 #pprint.pprint(sorted(data))

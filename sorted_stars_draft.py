@@ -14,5 +14,8 @@ data = [
 ('Ross 154',			9.4,	0.00002,	0.0005),
 ]
 
-pprint.pprint(data)
-pprint.pprint(sorted(data))
+SNvD
+SNvAppBr
+SNvAbsBr
+#pprint.pprint(data)
+#pprint.pprint(sorted(data))

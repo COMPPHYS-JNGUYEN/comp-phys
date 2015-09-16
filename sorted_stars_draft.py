@@ -29,10 +29,10 @@ def sortXvsY(data, index1=0, index2=0):
 		print 'Ranked by Absolute Brightness:\n'
 	else:
 		print 'Ranked by {:}:\n'.format(index2)	# Used when using unspecified data set, as opposed to our given data, with regards to particular index, but same formatting as given data set.
-	table = [X] + [Y]
-	pprint.pprint(table)
+	table = [X] + [Y]							# Concatenates [X] and [Y] together to make table of two desired lists.
+	pprint.pprint(table)						# Nicely prints out table.
 	#pprint.pprint(X), pprint.pprint(Y)			# Nicely prints out lists X and Y.
-	print
+	print										# Adds empty line
     
 
 data2 = [

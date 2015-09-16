@@ -1,26 +1,38 @@
+## Cleaner version of first and fourth cells
+## Need to figure out how to put lists into column/table form
+
 import pprint
 
-def sortXvsY(data, index1, index2):
-    if index1 or index2 >= len(data[0]):
-        print 'Cannot Use Indices'
-        return
-    data = sorted(data, key = lambda x: x[index2])
-    X = []
-    Y = []
-    [X.append(data[i][index1]) for i in range(len(data))]
-    [Y.append(data[i][index2]) for i in range(len(data))]
-    if index2 == 0:
-        print 'Ranked by Name:'
-    elif index2 == 1:
-        print 'Ranked by Distance:\n'
-    elif index2 == 2:
-        print 'Ranked by Apparent Brightness:\n'
-    elif index2 == 3:
-        print 'Ranked by Absolute Brightness:\n'
-    else:
-        print 'Ranked by {:}:\n'.format(str(index2))
-    pprint.pprint(X), pprint.pprint(Y)
-    print
+def sortXvsY(data, index1=0, index2=0):
+	if index1 or index2 >= len(data[0]):		# Wanted to generalize function given different data, but same format.  If either index is out of range, print message and stop remainder of program.
+		LenDataElement = len(data[0])			# Length of element in data, used to establish how high index can go.
+		print 'Cannot use provided indices.  Max index is {}.'.format(LenDataElement - 1)	# Prints out error message, stating that index maxes out at len(data[0]).
+		return									# Exits out of function
+	elif index1 == index2:						# If indices equal to each other after passing first (if) condition, then sort data according to index2 (although using either index doesn't matter since both are equal).						
+		print 'Sorted data according to index {}.\n'.format(index2)							# A notice to user that because indices matched, sorted data by default indices or equal indices.
+		pprint.pprint(sorted(data, key = lambda x: x[index2]))								# Sort data, and pretty print, according to index2.
+		print									# Empty line to make printing look nicer.
+		return sorted(data, key = lambda x: x[index2])
+   
+	data = sorted(data, key = lambda x: x[index2])											# Sort data according to given index, index2.
+	X = []										# Empty list for first desired list, used for initialization.
+	Y = []										# Empty list for second desired list, used for initialization.
+	[X.append(data[i][index1]) for i in range(len(data))]									# Appends index1-th element of i-th element of data to empty list X with list comprehension.
+	[Y.append(data[i][index2]) for i in range(len(data))]									# Appends index1-th element of i-th element of data to empty list Y with list comprehension.
+	if index2 == 0:								# This if statement and following statements added mainly for the sake of the homework.  We know that the 0 through 3 indices correspond to name, distance, apparent brightness, and absolute brightness respectively.
+		print 'Ranked by Name:'
+	elif index2 == 1:
+		print 'Ranked by Distance:\n'
+	elif index2 == 2:
+		print 'Ranked by Apparent Brightness:\n'
+	elif index2 == 3:
+		print 'Ranked by Absolute Brightness:\n'
+	else:
+		print 'Ranked by {:}:\n'.format(index2)	# Used when using unspecified data set, as opposed to our given data, with regards to particular index, but same formatting as given data set.
+	table = [X] + [Y]
+	pprint.pprint(table)
+	#pprint.pprint(X), pprint.pprint(Y)			# Nicely prints out lists X and Y.
+	print
     
 
 data2 = [
@@ -37,6 +49,7 @@ data2 = [
 ('Ross 154',            9.4,    0.00002,    0.0005),
 ]
 
+sortXvsY(data2)
 sortXvsY(data2, 0, 1)
 sortXvsY(data2, 0, 2)
 sortXvsY(data2, 0, 3)

@@ -13,15 +13,21 @@ def fractionaldifference(prev, curr):
 def gamma_otherwise(t):     
     initial = 0
     final = 1000
-    dx = 0.0625
-    integralsum = 0
+    frac_diff = 1.
+    dx = 1.
+    integral_previous = 0.
     steps = (final - initial)/dx
-    for j in range(1, int(steps) + 1):
-        height = f(initial + j*dx, t)
-        area = dx*height
-        integralsum += area
-    return integralsum
-
+    while frac_diff > 1e-4:
+        integral_current = 0.
+        for j in range(1, int(steps) + 1):
+            height = f(initial + j*dx, t)
+            area = dx*height
+            integral_current += area
+        frac_diff = fractionaldifference(integral_previous, integral_current)
+        integral_previous = integral_current
+        steps *= 2.
+        dx /= 2.
+    return integral_previous
 def computegamma(t):
     if t < 1. or t > 100.:
         return "Please enter value that is between 1 and 100, inclusive."

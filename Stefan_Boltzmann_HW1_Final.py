@@ -7,9 +7,9 @@ def fractionaldifference(prev, curr):       #Calculates the fractional differenc
     frac_diff = (curr - prev)/float(curr)
     return frac_diff
 
-def integral(intial, final, steps, dy):     #Used to find integral when given the starting and ending points, desired starting number of steps, and how wide the step should be.
+def integral(initial, final, steps, dy):     #Used to find integral when given the starting and ending points, desired starting number of steps, and how wide the step should be.
     frac_diff = 1                           #Needed to initialize frac_diff to start while loop, then reassigned frac_diff by calling fractionaldifference().
-    integral_previous = 0.                  #Initialize integral_previous.
+    integral_previous = 0.                  #Initialize integral_previous.++++++++++++++++++++++
     print 'running...'
     while frac_diff > 1e-6:                 #After frac_diff reaches 1e-6, stop while loop.
         integral_current = 0.               #Initialize integral_current.

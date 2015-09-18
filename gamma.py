@@ -22,17 +22,17 @@ import pdb
 
 
 
-def gamma_if_int(t):
+def gamma_if_int(t):					# Normal gamma function if t is an integer
     return math.factorial(t-1)
 
-def f(x, t):
+def f(x, t):							# Integrand
 	return (x**(t-1))*(math.exp(-x))
 
-def fractionaldifference(prev, curr):       
+def fractionaldifference(prev, curr):   # Finds fractional difference between current and previous integral values
 	frac_diff = (curr - prev)/float(curr)
 	return frac_diff
 
-def gamma_otherwise(t, tol):  
+def gamma_otherwise(t, tol):  			# Calculates gamma if t is a float
 	#pdb.set_trace()
 	initial = 0
 	final = 1000
@@ -52,7 +52,7 @@ def gamma_otherwise(t, tol):
 		dx /= 2.
 	return integral_previous, frac_diff
 	
-def computegamma(t, tolerance = 1e-4):
+def computegamma(t, tolerance = 1e-4):			# Programs computes gamma
 	if t < 1. or t > 100.:
 		return "Please enter value that is between 1 and 100, inclusive."
 	if type(t) == int:
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 	t = args.x
 	y = args.y
 	
-	str_t = str(t)
+	str_t = str(t)				# From command-line, determines if value is integer, and turns it into an integer from float type.
 	if str_t[-1] == '0':
 		t = int(t)
 		

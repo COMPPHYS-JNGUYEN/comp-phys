@@ -54,6 +54,7 @@ if __name__ == "__main__":
     parser.add_argument('-x', type = float)
     args = parser.parse_args()
     x = args.x
+    y = args.y
 
 #   x = 1000
     y = L(x)

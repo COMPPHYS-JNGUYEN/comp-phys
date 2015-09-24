@@ -23,6 +23,18 @@ def find_primenumber(start, end):
             prime.append(k)
     return prime
             
-x = find_primenumber(1, 1000)
-print x
-print len(x)
+
+if __name__ == "__main__":
+
+    import doctest
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-b', type = int)
+    parser.add_argument('-f', type = int)
+    args = parser.parse_args()
+    begin = args.b
+    finish = args.f
+    x = find_primenumber(begin, finish)
+    print x
+    

@@ -5,6 +5,10 @@
 
 This program finds the prime numbers from a desired range of numbers.  Given a starting number and ending number, prime.py will find all the prime numbers between and including the given numbers.
 
+
+>>> find_primenumber(-2, 100)
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+
 """
 
 import numpy as np

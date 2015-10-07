@@ -4,13 +4,20 @@ class Dolphins():
         self.sex = sex
         self.age = 0
         self.death = 0
+        self.parents = []
         
     
-    def MarvinGaye(self):                   ## Procreation method: determines whether a dolphin is allowed to procreate with another.
-        
+    def MarvinGaye(self, partner):                   ## Procreation method: determines whether a dolphin is allowed to procreate with another.
+        calf = 0
+        if self.age >= 8 and abs(self.age - partner.age) <= 10 and self.sex != partner.sex:
+            if self.parents == [] or partner.parents == [] or self.parents != partner.parents:
+                proc = True
+        else:
+            proc = False
     
-    def elderfy(self):                      ## Aging method: updates the age attribute each year.
-        pass
+    def agify(self):                                 ## Aging method: updates the age attribute each year.
+        self.age += 1
+        return self.age
     
     
 ########################
@@ -24,8 +31,3 @@ dolphinstances.append(Dolphins(elder_dolphins[1], 'F'))
 dolphinstances.append(Dolphins(elder_dolphins[2], 'M'))
 dolphinstances.append(Dolphins(elder_dolphins[3], 'M'))
 
-for i in dolphinstances:
-    print i.name
-    print i.sex
-    print i.age
-    print i.death

@@ -3,15 +3,15 @@ class Dolphins():
         self.name = name
         self.sex = sex
         self.age = 0
+        self.mother =
+        self.father =
         self.death = 0
-        self.parents = []
-        
+        self.refracperiod = 0
     
     def MarvinGaye(self, partner):                   ## Procreation method: determines whether a dolphin is allowed to procreate with another.
         calf = 0
-        if self.age >= 8 and abs(self.age - partner.age) <= 10 and self.sex != partner.sex:         ## Dolphin age 8 or greater; Within 10 years of mate; Opposite sex
-            if self.parents == [] or partner.parents == [] or self.parents != partner.parents:      ## If elder dolphins, parents are non-existant, so empty list; If parents are the same, then 
-                proc = True
+        if self.age >= 8 and abs(self.age - partner.age) <= 10 and self.sex != partner.sex and self.father != :         ## Dolphin age 8 or greater; Within 10 years of mate; Opposite sex
+            
         else:
             proc = False
     

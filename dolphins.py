@@ -6,7 +6,7 @@ names = ['Charmander', 'Squirtle', 'Bulbasaur', 'Ekans', 'Diglet', 'Dodrio', 'Ab
 
 child_dict = {}
 
-def MarvinGaye(partner1, partner2):
+def MarvinGaye(partner1, partner2):                 ## "Let's Marvin Gaye and get it on.
     if partner1.sex == 'M':
         MalePartner = partner1.name
     else:
@@ -23,7 +23,7 @@ def MarvinGaye(partner1, partner2):
         partner2.refracperiod = 0
 
 
-class Dolphins:
+class Dolphins:                                     ## Dolphins class can age dolphins and check if they can procreate.
     def __init__(self, name, sex, mother, father):
         self.name = name
         self.sex = sex

@@ -3,6 +3,7 @@ import numpy as np
 import re
 import urllib
 import matplotlib.pyplot as plt
+import os.path
 
 from pdb import set_trace
 
@@ -59,24 +60,27 @@ def namegen(sex):
 
 # Extracts male and female names from URL.
 i = 1
-maleurl = "http://www.prokerala.com/kids/baby-names/boy/page-1.html"
-femaleurl = "http://www.prokerala.com/kids/baby-names/girl/page-1.html"
-while len(malenames) < 1000:    #Male Names Max: 7880
-    x = maleurl.replace('1', str(i))
-    xinfile = urllib.urlopen(x)
-    xhtml = xinfile.readlines()
-    xinfile.close()
-    findnames(xhtml, 'M')
-    i += 1
+if os.path.isfile(male_filenm) == True:
+    ''
+else:
+    maleurl = "http://www.prokerala.com/kids/baby-names/boy/page-1.html"
+    femaleurl = "http://www.prokerala.com/kids/baby-names/girl/page-1.html"
+    while len(malenames) < 7880:    #Male Names Max: 7880
+        x = maleurl.replace('1', str(i))
+        xinfile = urllib.urlopen(x)
+        xhtml = xinfile.readlines()
+        xinfile.close()
+        findnames(xhtml, 'M')
+        i += 1
 
-j = 1
-while len(femalenames) < 1000:    # Female Names Max: 5974
-    y = femaleurl.replace('1', str(j))
-    yinfile = urllib.urlopen(y)
-    yhtml = yinfile.readlines()
-    yinfile.close()
-    findnames(yhtml, 'F')
-    j += 1
+    j = 1
+    while len(femalenames) < 5974:    # Female Names Max: 5974
+        y = femaleurl.replace('1', str(j))
+        yinfile = urllib.urlopen(y)
+        yhtml = yinfile.readlines()
+        yinfile.close()
+        findnames(yhtml, 'F')
+        j += 1
 
 # Make male and female names list extracted from websites text file that is writable.
 with open(male_filenm, "w") as f:
@@ -212,10 +216,11 @@ avg = [i[0] for i in avg_std]
 #####################################################################################################################
 
 x = np.arange(0, years, 1)
-
 plt.plot(x, avg, 'r')
-plt.plot(x, std_above)
-plt.plot(x, std_below)
+#plt.plot(x, std_above, 'g')
+#plt.plot(x, std_below, 'g')
+plt.fill_between(x, std_below, std_above)
+
 
 plt.show()
 

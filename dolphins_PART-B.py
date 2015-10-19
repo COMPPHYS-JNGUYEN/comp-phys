@@ -27,9 +27,9 @@ femalenames = []
 
 # Creates the text file directory path for the male and female lists for later extraction.
 # Put above functions and other code to be used as global variable inside functions.
-male_dir_path = "/Users/labuser/comp-phys/"         # PC: "C:/Users/James/Documents/GitHub/comp-phys/"
+male_dir_path = "C:/Users/James/Documents/GitHub/comp-phys/"        # PC: "C:/Users/James/Documents/GitHub/comp-phys/"
 male_filenm = male_dir_path + 'malenames.txt'       # Mac: "/Users/labuser/comp-phys/"
-female_dir_path = "/Users/labuser/comp-phys/"
+female_dir_path = "C:/Users/James/Documents/GitHub/comp-phys/"
 female_filenm = female_dir_path + 'femalenames.txt'
 
 # findnames() finds the names from the website and adds them to a list, malenames.  Same happens for femalenames

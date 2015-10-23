@@ -4,8 +4,8 @@
     to procreate as well.  Over the span of 149 years, the program tracks the dolphin population's information for 10 trials and provides a graph of the dolphin population
     over 149 years.
     
-    This program file corresponds to PART A of the project.
-"""
+    This program file corresponds to PART C of the project.
+    """
 
 import random
 import numpy as np
@@ -13,6 +13,7 @@ import re
 import urllib
 import matplotlib.pyplot as plt
 import os.path
+import networkx as nx
 
 from pdb import set_trace
 
@@ -166,6 +167,7 @@ elder_dolphins = ['Shakira', 'Jency', 'Lothar', 'JinBiao']
 m_dolphins = []
 f_dolphins = []
 living = []             # Initialized to track number of living dolphins each year of each trial.
+dolphin_pop_75 = []
 
 # for loop used to match length of list for dictionary tracking in the following for loop.
 for i in range(10):
@@ -205,6 +207,12 @@ for trial in range(10):
         if years % 25 == 0:
             print "#"*50
             print "Entering year {:d} with {:d} dolphins, with {:d} breeding.".format(years, len(m_keys) + len(f_keys) - len(deaths), abs(len(m_keys2)+len(f_keys2) - len(m_keys)-len(f_keys)))
+        if years == 75:
+            m_copy = m_dolphins[trial].copy()
+            f_copy = f_dolphins[trial].copy()
+            m_copy.update(f_copy)
+            map(m_copy.pop, deaths)
+            dolphin_pop_75.append(m_copy)
         if years == 100:
             print "At year {:d}, there are {:d} living dolphins.\nthere have been {:d} births, in total.".format(years, len(m_keys2) + len(f_keys2) - len(deaths), len(m_keys2) + len(f_keys2) - 4)
         if years == 149:
@@ -226,12 +234,67 @@ avg = [i[0] for i in avg_std]
 #####################################################################################################################
 
 # Plots the average number of dolphins over a timespan
-x = np.arange(0, years, 1)
-plt.title('Average Population and Standard Deviation from 10 Trials')
-plt.plot(x, avg, 'r')
-plt.xlabel('Years')
-plt.ylabel('Number of Living Dolphins')
-plt.fill_between(x, std_below, std_above)
+# x = np.arange(0, years, 1)
+# plt.title('Average Population and Standard Deviation from 10 Trials')
+# plt.plot(x, avg, 'r')
+# plt.xlabel('Years')
+# plt.ylabel('Number of Living Dolphins')
+# plt.fill_between(x, std_below, std_above)
 
+# plt.show()
+
+#####################################################################################################################
+#####################################################################################################################
+#####################################################################################################################
+#####################################################################################################################
+#####################################################################################################################
+
+rand = random.randrange(0, 10)
+
+dolphin_pop = {}
+dolphin_pop.update(dolphin_pop_75[rand])
+
+char = (random.sample(dolphin_pop, 1))[0]
+mom_char = dolphin_pop[char].mother
+dad_char = dolphin_pop[char].father
+
+mom_half = []
+dad_half = []
+full_sib = []
+for elem in dolphin_pop:
+    if dolphin_pop[elem].mother == mom_char and dolphin_pop[elem].father == dad_char:
+        full_sib.append(elem)
+    elif dolphin_pop[elem].mother == mom_char:
+        mom_half.append(elem)
+    elif dolphin_pop[elem].father == dad_char:
+        dad_half.append(elem)
+
+
+gen = nx.Graph()
+
+gen.add_node(mom_char, pos=(0, 3))
+gen.add_node(dad_char, pos=(3, 3))
+
+xh = .5
+xf = 0
+for i in dolphin_pop:
+    if i in mom_half:
+        gen.add_node(i, pos=(xh, 1))
+        gen.add_edge(i, mom_char)
+        xh += 2
+    if i in dad_half:
+        gen.add_node(i, pos=(xh, 1))
+        gen.add_edge(i, dad_char)
+        xh += 2
+    if i in full_sib:
+        gen.add_node(i, pos=(xf, 2))
+        gen.add_edge(i, mom_char)
+        gen.add_edge(i, dad_char)
+        xf += 2
+
+pos = nx.get_node_attributes(gen, 'pos')
+
+nx.draw_networkx(gen, pos)
+plt.title(char + "'s Family Tree")
+plt.axis('off')
 plt.show()
-

@@ -4,6 +4,9 @@
     to procreate as well.  Over the span of 149 years, the program tracks the dolphin population's information for 10 trials and provides a graph of the dolphin population
     over 149 years.
     
+    This program also chooses a random dolphin around the year 70 displays a visual geneology.  The top-most layer corresponds to the dolphin's parents,
+    the middle layer corresponds to its siblings, including itself, and the bottom-most layer corresponds to half siblings.
+
     This program file corresponds to PART C of the project.
     """
 
@@ -208,11 +211,11 @@ for trial in range(10):
             print "#"*50
             print "Entering year {:d} with {:d} dolphins, with {:d} breeding.".format(years, len(m_keys) + len(f_keys) - len(deaths), abs(len(m_keys2)+len(f_keys2) - len(m_keys)-len(f_keys)))
         if years == 75:
-            m_copy = m_dolphins[trial].copy()
+            m_copy = m_dolphins[trial].copy()       # Copied, without having variable point to same object when m_dolphins[trial] updates.
             f_copy = f_dolphins[trial].copy()
-            m_copy.update(f_copy)
-            map(m_copy.pop, deaths)
-            dolphin_pop_75.append(m_copy)
+            m_copy.update(f_copy)                   # Puts all living dolpins into m_copy for later use.
+            map(m_copy.pop, deaths)                 # Removes the dead dolphins from the list death, from m_copy.
+            dolphin_pop_75.append(m_copy)           # Adds the entire living dolphin population around the year 75 to the initialized list.
         if years == 100:
             print "At year {:d}, there are {:d} living dolphins.\nthere have been {:d} births, in total.".format(years, len(m_keys2) + len(f_keys2) - len(deaths), len(m_keys2) + len(f_keys2) - 4)
         if years == 149:
@@ -233,68 +236,52 @@ avg = [i[0] for i in avg_std]
 #####################################################################################################################
 #####################################################################################################################
 
-# Plots the average number of dolphins over a timespan
-# x = np.arange(0, years, 1)
-# plt.title('Average Population and Standard Deviation from 10 Trials')
-# plt.plot(x, avg, 'r')
-# plt.xlabel('Years')
-# plt.ylabel('Number of Living Dolphins')
-# plt.fill_between(x, std_below, std_above)
-
-# plt.show()
-
-#####################################################################################################################
-#####################################################################################################################
-#####################################################################################################################
-#####################################################################################################################
-#####################################################################################################################
-
-rand = random.randrange(0, 10)
+rand = random.randrange(0, 10)              # rand initialized from 0 to 9 since there are 10 trials.  Chooses a random trial.
 
 dolphin_pop = {}
-dolphin_pop.update(dolphin_pop_75[rand])
+dolphin_pop.update(dolphin_pop_75[rand])    # Used to put entire population of living dolphins during specific trial into one variable.
 
-char = (random.sample(dolphin_pop, 1))[0]
-mom_char = dolphin_pop[char].mother
+char = (random.sample(dolphin_pop, 1))[0]   # Chooses main character from the dolphin_pop dictionary.
+mom_char = dolphin_pop[char].mother         # Put's the main character's mom into a variable.
 dad_char = dolphin_pop[char].father
 
-mom_half = []
+mom_half = []                               # Initialized empty list for mom's side half siblings.
 dad_half = []
-full_sib = []
+full_sib = []                               # Initialized empty list for full siblings.
 for elem in dolphin_pop:
-    if dolphin_pop[elem].mother == mom_char and dolphin_pop[elem].father == dad_char:
+    if dolphin_pop[elem].mother == mom_char and dolphin_pop[elem].father == dad_char:           # Adds full siblings to intialized empty list.
         full_sib.append(elem)
-    elif dolphin_pop[elem].mother == mom_char:
+    elif dolphin_pop[elem].mother == mom_char:          # Adds mom's side half siblings to intialized empty list.
         mom_half.append(elem)
     elif dolphin_pop[elem].father == dad_char:
         dad_half.append(elem)
 
 
-gen = nx.Graph()
+gen = nx.Graph()            # Creates graph for geneology.
 
-gen.add_node(mom_char, pos=(0, 3))
+gen.add_node(mom_char, pos=(0, 3))          # Predetermined mother and father locations on the graph.
 gen.add_node(dad_char, pos=(3, 3))
 
-xh = .5
-xf = 0
+xh = .5             # Initial half sibling coordinate on the x-axis.
+xf = 0              # Initial full sibling coordinate on the x-axis.
 for i in dolphin_pop:
-    if i in mom_half:
+    if i in mom_half:               # Checks if i, particular dolphin, is part of mom's side for half sibling.  Then adds node for the dolphin, then connects the mom and dolphin with the edge.
         gen.add_node(i, pos=(xh, 1))
         gen.add_edge(i, mom_char)
         xh += 2
-    if i in dad_half:
+    if i in dad_half:               # Checks if i, particular dolphin, is part of dad's side for half sibling.  Then adds node for the dolphin, then connects the dad and dolphin with the edge.
         gen.add_node(i, pos=(xh, 1))
         gen.add_edge(i, dad_char)
         xh += 2
-    if i in full_sib:
+    if i in full_sib:               # Checks if i, particular dolphin, is a full sibling.  Then adds node for that dolphin and connects that dolphin with the parents with an edge.
         gen.add_node(i, pos=(xf, 2))
         gen.add_edge(i, mom_char)
         gen.add_edge(i, dad_char)
         xf += 2
 
-pos = nx.get_node_attributes(gen, 'pos')
+pos = nx.get_node_attributes(gen, 'pos')            # Get's the node attributes from the graph, gen, particularly the position of the nodes.
 
-nx.draw_networkx(gen, pos)
+nx.draw_networkx(gen, pos)                          # Draws the geneology graph and uses pos for the position of the nodes.
 plt.title(char + "'s Family Tree")
-plt.axis('off')
+plt.axis('off')                                     # Turns off the axis of the plot/graph
 plt.show()

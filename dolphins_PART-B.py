@@ -118,11 +118,15 @@ def MarvinGaye(mdictionary, fdictionary, partner1, partner2, malegen, femalegen,
         p = random.random()                 # Creates random numbers between 0 and 1.
         if p < prob:                        # Used to control probability of producing male calf.
             child_name = malegen.next()     # malegen.next() gives the next child name in the list of males from the .txt file.
+            while child_name in mdictionary or child_name in fdictionary:
+                child_name = malegen.next()
             mdictionary[child_name] = Dolphins(child_name, 'M', FemalePartner, MalePartner)
             partner1.refracperiod = 0       # Resets procreating dolpins' refractory period so they cannot procreate until it is over
             partner2.refracperiod = 0
         else:
             child_name = femalegen.next()
+            while child_name in mdictionary or child_name in fdictionary:
+                child_name = femalegen.next()
             fdictionary[child_name] = Dolphins(child_name, 'F', FemalePartner, MalePartner)
             partner1.refracperiod = 0
             partner2.refracperiod = 0
@@ -257,7 +261,7 @@ std_above = [i + j for i, j in avg_std]
 std_below = [i - j for i, j in avg_std]
 avg = [i[0] for i in avg_std]
 min_prob = np.mean(min_prob_list)*100
-print 'Minimum probability:', min_prob, '%'
+print 'Minimum probability of dolphin population survivability:', min_prob, '%'
 
 #####################################################################################################################
 #####################################################################################################################

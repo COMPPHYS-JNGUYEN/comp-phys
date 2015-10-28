@@ -25,9 +25,9 @@ femalenames = []
 
 # creates the text file directory path for the male and female lists for later extraction.
 # put above functions and other code to be used as global variable inside functions.
-male_dir_path = "/Users/labuser/comp-phys/"         # PC: "C:/Users/James/Documents/GitHub/comp-phys/"
+male_dir_path = "C:/Users/James/Documents/GitHub/comp-phys/"         # PC: "C:/Users/James/Documents/GitHub/comp-phys/"
 male_filenm = male_dir_path + 'malenames.txt'       # Mac: "/Users/labuser/comp-phys/"
-female_dir_path = "/Users/labuser/comp-phys/"
+female_dir_path = "C:/Users/James/Documents/GitHub/comp-phys/"
 female_filenm = female_dir_path + 'femalenames.txt'
 
 def findnames(code, gender):
@@ -113,11 +113,15 @@ def MarvinGaye(mdictionary, fdictionary, partner1, partner2, malegen, femalegen)
         child_sex = random.sample(['M', 'F'], 1)[0]
         if child_sex == 'M':
             child_name = malegen.next()
+            while child_name in mdictionary or child_name in fdictionary:
+                child_name = malegen.next()
             mdictionary[child_name] = Dolphins(child_name, child_sex, FemalePartner, MalePartner)
             partner1.refracperiod = 0
             partner2.refracperiod = 0
         else:
             child_name = femalegen.next()
+            while child_name in mdictionary or child_name in fdictionary:
+                child_name = femalegen.next()
             fdictionary[child_name] = Dolphins(child_name, child_sex, FemalePartner, MalePartner)
             partner1.refracperiod = 0
             partner2.refracperiod = 0

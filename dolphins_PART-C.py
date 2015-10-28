@@ -29,9 +29,9 @@ femalenames = []
 
 # creates the text file directory path for the male and female lists for later extraction.
 # put above functions and other code to be used as global variable inside functions.
-male_dir_path = "/Users/labuser/comp-phys/"         # PC: "C:/Users/James/Documents/GitHub/comp-phys/"
+male_dir_path = "C:/Users/James/Documents/GitHub/comp-phys/"         # PC: "C:/Users/James/Documents/GitHub/comp-phys/"
 male_filenm = male_dir_path + 'malenames.txt'       # Mac: "/Users/labuser/comp-phys/"
-female_dir_path = "/Users/labuser/comp-phys/"
+female_dir_path = "C:/Users/James/Documents/GitHub/comp-phys/"
 female_filenm = female_dir_path + 'femalenames.txt'
 
 def findnames(code, gender):
@@ -117,11 +117,15 @@ def MarvinGaye(mdictionary, fdictionary, partner1, partner2, malegen, femalegen)
         child_sex = random.sample(['M', 'F'], 1)[0]
         if child_sex == 'M':
             child_name = malegen.next()
+            while child_name in mdictionary or child_name in fdictionary:
+                child_name = malegen.next()
             mdictionary[child_name] = Dolphins(child_name, child_sex, FemalePartner, MalePartner)
             partner1.refracperiod = 0
             partner2.refracperiod = 0
         else:
             child_name = femalegen.next()
+            while child_name in mdictionary or child_name in fdictionary:
+                child_name = femalegen.next()
             fdictionary[child_name] = Dolphins(child_name, child_sex, FemalePartner, MalePartner)
             partner1.refracperiod = 0
             partner2.refracperiod = 0
@@ -249,11 +253,11 @@ mom_half = []                               # Initialized empty list for mom's s
 dad_half = []
 full_sib = []                               # Initialized empty list for full siblings.
 for elem in dolphin_pop:
-    if dolphin_pop[elem].mother == mom_char and dolphin_pop[elem].father == dad_char:           # Adds full siblings to intialized empty list.
+    if dolphin_pop[elem].mother == mom_char and dolphin_pop[elem].father == dad_char and dolphin_pop[elem] != char:           # Adds full siblings to intialized empty list.
         full_sib.append(elem)
-    elif dolphin_pop[elem].mother == mom_char:          # Adds mom's side half siblings to intialized empty list.
+    elif dolphin_pop[elem].mother == mom_char and dolphin_pop[elem] != char:          # Adds mom's side half siblings to intialized empty list.
         mom_half.append(elem)
-    elif dolphin_pop[elem].father == dad_char:
+    elif dolphin_pop[elem].father == dad_char and dolphin_pop[elem] != char:
         dad_half.append(elem)
 
 
@@ -282,6 +286,6 @@ for i in dolphin_pop:
 pos = nx.get_node_attributes(gen, 'pos')            # Get's the node attributes from the graph, gen, particularly the position of the nodes.
 
 nx.draw_networkx(gen, pos)                          # Draws the geneology graph and uses pos for the position of the nodes.
-plt.title(char + "'s Family Tree")
+plt.title(char + "'s Family Web")
 plt.axis('off')                                     # Turns off the axis of the plot/graph
 plt.show()

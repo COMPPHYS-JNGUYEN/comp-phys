@@ -36,37 +36,70 @@ class Tone:
             self.playsound(outside_signal=OT_signal)
         return None
 
+    def comb_tones(self):
+        normalize = 0
+        OT_weights = self.overtones.copy()
+        for i in OT_weights:
+            OT_weights[i] = int(raw_input('Please enter weight for overtone {:f}: '.format(i)))
+        for key in OT_weights:
+            normalize += OT_weights[key]**2
+        normalize **= .5
+        for key in OT_weights:
+            OT_weights[key] = OT_weights[key]/normalize
+            self.signal += OT_weights[key]*self.overtones[key]
+        return self.signal
+
     def playsound(self, outside_signal=None, sample_rate=44100, vol=0.05):
         if outside_signal == None:
-            write('tmp.wav', self.sr, self.signal)
+            write('tmp.wav', sample_rate, np.int16(vol*self.signal))
             os.system("afplay tmp.wav")
             os.system("rm tmp.wav")
         else:
-            write('tmp.wav', self.sr, outside_signal)
+            write('tmp.wav', sample_rate, outside_signal)
             os.system("afplay tmp.wav")
             os.system("rm tmp.wav")
 
-    def comb_tones(self):
-        OT_weights = range(OT_num)
-        for elem in OT_weights:
-            OT_weights[elem] = raw_input('Please enter weight for overtone {:d}'.format(elem))
-    
-
-    def plot_fourier(self,sample_rate=44100, freq_lim=2000., amp_lim=1e7):
-        ft = np.fft.fft(signal)
-        freq = np.fft.fftfreq(signal.shape[0], d = 1./sample_rate)
+    def plot_fourier(self, sample_rate=44100, freq_lim=2000., amp_lim=1e7):
+        ft = np.fft.fft(self.signal)
+        freq = np.fft.fftfreq(self.signal.shape[0], d = 1./sample_rate)
 
         plt.figure()
         plt.plot(freq, ft.real, 'b-')
-        plt.xlim([-1000, 1000])
+        plt.xlim([-freq_lim, freq_lim])
+        plt.ylim([-amp_lim, amp_lim])
         plt.figure()
         plt.plot(freq, ft.imag, 'g-')
-        plt.xlim([-1000, 1000])
+        plt.xlim([-freq_lim, freq_lim])
+        plt.ylim([-amp_lim, amp_lim])
         plt.show()
 
-        return ft, freq
+    def plot_sound(self, t_lim=0.02):
+        time = np.linspace(0, self.dur, self.dur*self.sr)
+        plt.figure()
+        plt.title("Sound Wave vs. Time")
+        plt.plot(time, self.signal)
+        plt.xlim([0, t_lim])
+        plt.show()
 
 
+fund1 = Tone()
+fund2 = Tone()
+fund3 = Tone()
+fund4 = Tone()
+
+A = fund1.get_tone(440., .5)          # A tone.
+B = fund2.get_tone(493.88, .5)        # B tone.
+D = fund3.get_tone(587.33, .5)        # D tone.
+G = fund4.get_tone(392., .5)          # G tone.
+
+fund1.get_overtone(2)
+fund1.get_overtone(3)
+fund1.get_overtone(4)
+f1_rich = fund1.comb_tones()
+
+melody = np.concatenate(np.array([B, A, G, A, B, B, B, B, A, A, A, A]))
+mel = Tone()
+mel.playsound(outside_signal=melody)
 
 #def equalizer(sample_rate, sound, wt1 = None, wt2 = None, wt3 = None, vol = 1.):
 #    if wt1==None or wt2==None or wt3==None:

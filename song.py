@@ -49,7 +49,8 @@ class Tone:
     def comb_tones(self):
         OT_weights = range(OT_num)
         for elem in OT_weights:
-            OT_weights[elem] = raw_input('Please enter weight for overtone {:d}:
+            OT_weights[elem] = raw_input('Please enter weight for overtone {:d}'.format(elem))
+    
 
     def plot_fourier(self,sample_rate=44100, freq_lim=2000., amp_lim=1e7):
         ft = np.fft.fft(signal)

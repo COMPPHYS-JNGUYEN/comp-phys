@@ -30,7 +30,7 @@ def extract_shape(im_file, blowup=1., plot_img=False, plot_contour=False, plot_c
     
     # Have to flip x to get the orientation right, again just a peculiar convention we have to work around
     # Note the [::] notation: a[3:20:2] means from the 3rd element to the 20th element, choose every 2nd element.
-    x = x[::1]
+    y = y[::-1]
     
     # In case I want to shift x.
     #x_shift = 200
@@ -135,24 +135,29 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument('-order', type=int)
+    parser.add_argument('--no-norm', dest='norm', action='store_false')
+    parser.add_argument('-zeroth', dest='no_zeroth', action='store_false')
+    parser.set_defaults(no_zeroth=True, norm=True)
     args = parser.parse_args()
 
     order = args.order
+    norm = args.norm
+    no_zeroth = args.no_zeroth
     
     x1, y1 = extract_shape('number1.png')
     x2, y2 = extract_shape('number2.png')
     x6, y6 = extract_shape('number6.png')
 
-    fd1_mag, x1_rec, y1_rec = get_FD_abs(x1, y1, order)
-    fd2_mag, x2_rec, y2_rec = get_FD_abs(x2, y2, order)
-    fd6_mag, x6_rec, y6_rec = get_FD_abs(x6, y6, order)
+    fd1_mag, x1_rec, y1_rec = get_FD_abs(x1, y1, order, norm, no_zeroth)
+    fd2_mag, x2_rec, y2_rec = get_FD_abs(x2, y2, order, norm, no_zeroth)
+    fd6_mag, x6_rec, y6_rec = get_FD_abs(x6, y6, order, norm, no_zeroth)
 
     plt.figure()
-    plt.xlim(-.02, .02)
-    plt.ylim(-.02, .02)
+#    plt.xlim(-.02, .02)
+#    plt.ylim(-.02, .02)
     plt.title("Numbers Recovered From FD's")
     for i in range(len(x1_rec)):
-        plt.plot(y1_rec[i], x1_rec[i], 'b')
+        plt.plot(x1_rec[i], y1_rec[i], 'b')
     for i in range(len(x2_rec)):
         plt.plot(x2_rec[i], y2_rec[i], 'g')
     for i in range(len(x6_rec)):
@@ -164,10 +169,10 @@ if __name__ == "__main__":
     plt.title("Magnitudes of FD's for 1, 2, and 6")
     plt.xlim(0, 2*order)
     for i in range(len(fd1_mag)):
-        plt.plot(np.arange(2, 2*order), fd1_mag[i][1:-1], 'bo')
+        plt.plot(fd1_mag[i], 'bo')
     for i in range(len(fd2_mag)):
-        plt.plot(np.arange(2, 2*order), fd2_mag[i][1:-1], 'gx')
+        plt.plot(fd2_mag[i], 'gx')
     for i in range(len(fd6_mag)):
-        plt.plot(np.arange(2, 2*order), fd6_mag[i][1:-1], 'r^')
+        plt.plot(fd6_mag[i], 'r^')
     plt.savefig('FourierDescriptor_numbers126.pdf')
     plt.show()

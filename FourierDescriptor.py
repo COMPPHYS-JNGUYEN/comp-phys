@@ -153,8 +153,6 @@ if __name__ == "__main__":
     fd6_mag, x6_rec, y6_rec = get_FD_abs(x6, y6, order, norm, no_zeroth)
 
     plt.figure()
-#    plt.xlim(-.02, .02)
-#    plt.ylim(-.02, .02)
     plt.title("Numbers Recovered From FD's")
     for i in range(len(x1_rec)):
         plt.plot(x1_rec[i], y1_rec[i], 'b')

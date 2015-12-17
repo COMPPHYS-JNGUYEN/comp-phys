@@ -1,23 +1,27 @@
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from scipy.interpolate import interp2d
+from skimage import transform, data, io
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 from sklearn.datasets import load_digits
+from sklearn import preprocessing
+from sklearn import svm
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
-from skimage import transform, data, io
+
 
 def interpol_im(im, dim1=8, dim2=8, plot_new_im=False, cmap='binary', axis_off=False):
     im = im[:,:,0]
     x = np.arange(im.shape[1])
     y = np.arange(im.shape[0])
-    print(x.shape,y.shape)
+
     f2d = interp2d(x, y, im)
     
     x_new = np.linspace(0, im.shape[1], dim1)
     y_new = np.linspace(0, im.shape[0], dim2)
-    
-    im_new = f2d(x_new, y_new)
+    im_new = -f2d(x_new, y_new)
     
     im_flat = im_new.flatten()
     
@@ -34,28 +38,21 @@ def pca_X(X, n_comp=10):
     return md_pca, X_proj
 
 def rescale_pixel(X, unseen, ind=0):
-    dig_data = load_digits()
-    X[ind] = dig_data.data
-    
-    return
+    X_train = X[ind]
+    min_max_scaler = preprocessing.MinMaxScaler(feature_range=(min(X_train), max(X_train)))
+    unseen_scaled = min_max_scaler.fit_transform(X_train, unseen).astype(int)
+    return unseen_scaled
     
 def svm_train(X, y, gamma=0.001, C=100):
-    
-    return
+    # instantiating an SVM classifier
+    md_clf = svm.SVC(gamma=0.001, C=100.)
+
+    # apply SVM to training data and draw boundaries.
+    md_clf.fit(X, y)
+    # a prediction for the test data point.
+    return md_clf
 
 def pca_svm_pred(imfile, md_pca, md_clf, dim1=45, dim2=60):
     im = mpimg.imread(imfile)
     f2d_flat = interpol_im(im, dim1=dim1, dim2=dim2)
     return
-
-# letterB = mpimg.imread('letterB.png')
-# letterB = letterB[:,:,0]
-
-
-# dig_data = load_digits()
-# X = dig_data.data
-# y = dig_data.target
-
-# print(letterB.shape)
-# f2d = interpol_im(letterB, plot_new_im=True)
-# # print(np.mean(X[0]), np.mean(letterB))

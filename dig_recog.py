@@ -1,11 +1,23 @@
-from scipy.interpolate import interp2d
-from sklearn.decomposition import PCA
-from sklearn.svm import SVC
-from sklearn.datasets import load_digits
+"""
+The following program uses 60 images to train by calling svm_train from pattern_recog_func.  From this, it returns md_clf to validate on the following 20 images in the dataset X, printing out any images for which the prediction is incorrect.  Also it prints out the total number of mis-identifications and the success rate.  The program then tests the classifier with an unseen image taken outside of the sklearn digit dataset.
+"""
+
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
+from pattern_recog_func import interpol_im
+from pattern_recog_func import pca_X
+from pattern_recog_func import rescale_pixel
+from pattern_recog_func import svm_train
+from pattern_recog_func import pca_svm_pred
+from pdb import set_trace
+from scipy.interpolate import interp2d
 from skimage import transform, data, io
+from sklearn.decomposition import PCA
+from sklearn.svm import SVC
+from sklearn.datasets import load_digits
+from sklearn import preprocessing
+from sklearn import svm
 
 
 dig_data = load_digits()
@@ -21,6 +33,7 @@ for i in range(tot_start, tot_end):
     ans = y[i]
     pre = md_clf.predict(X[i].reshape(1, -1))[0]
     if ans != pre:
+        mis += 1
         plt.imshow(X[i].reshape((8, 8)), cmap='binary')
         plt.show()
         print("--------> index, actual digit, svm_prediction: {:d}, {:d}, {:d}".format(i, ans, pre))

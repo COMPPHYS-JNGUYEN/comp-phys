@@ -10,14 +10,12 @@ ax = fig.add_subplot(111, aspect='equal')
 # creating an empty line object
 line, = ax.plot([], [], 's-', lw=2)
 
-ax.set_xlim([-10, 10])
-ax.set_ylim([-10, 10])
+ax.set_xlim([-2, 2])
+ax.set_ylim([-2, 2])
 
-y0, t0 = [np.pi/2, 0], 0
-
-def HO(y, t, b, c):
+def DP(y, t, m, l, g):
     '''
-        Harmonic oscillator
+        Double Pendulum
         
         b: drag coeff
         c: k/m
@@ -25,21 +23,32 @@ def HO(y, t, b, c):
         x --> Theta
         v --> Omega
         '''
-    x, v = y[0], y[1]
-    dxdt, dvdt = v, -b*v - c*np.sin(x)
-    return [dxdt, dvdt]
+    theta1, w1, theta2, w2 = y[0], y[1], y[2], y[3]
+    dtheta = theta1 - theta2
+    theta1_dot = w1
+    w1_dot = -.5*m*(l**2)*(w1*w2*np.sin(dtheta) + 3.*(g/l)*np.sin(theta1))
+    theta2_dot = w2
+    w2_dot = -.5*m*(l**2)*(-w1*w2*np.sin(dtheta) + (g/l)*np.sin(theta2))
+    return [theta1_dot, w1_dot, theta2_dot, w2_dot]
+
+y0, t0 = [np.pi/2, 0, np.pi/4, 0], 0
 
 t1 = np.pi*4
 dt = 0.01
 t_arr = np.arange(0, t1, dt)
 
-b = 0.001
 g = 9.8
-l = 10
-c = g/l
+l = 1
+m = 1
 
-th_o = odeint(HO, y0, t_arr, args=(b, c))
-th = th_o[:, 0]
+
+DP_stuff = odeint(DP, y0, t_arr, args=(m, l, g))
+
+theta1 = DP_stuff[:, 0]
+w1 = DP_stuff[:, 1]
+theta2 = DP_stuff[:, 2]
+w2 = DP_stuff[:, 3]
+
 time_template = 'time = %.1fs'
 time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
 #o = th_o[:, 1]
@@ -52,17 +61,20 @@ def init():
 def animate(i):
     #t_ani = t + i/10.0
 #    curr_t = t_arr[i]
-    curr_theta = th[i]
+    curr_theta1 = theta1[i]
+    curr_theta2 = theta2[i]
 #    curr_o = o[i]
     
-    curr_x = l*np.sin(curr_theta)
-    curr_y = l*np.cos(curr_theta)
+    curr_x1 = np.sin(curr_theta1)
+    curr_y1 = -np.cos(curr_theta1)
+    curr_x2 = curr_x1 + np.sin(curr_theta2)
+    curr_y2 = curr_y1 - np.cos(curr_theta2)
     
     #dt = 0.01
     
     
     #line.set_data(t, x)  # update the data
-    line.set_data([0,curr_x], [0,-curr_y])
+    line.set_data([0, curr_x1, curr_x2], [0, curr_y1, curr_y2])
     time_text.set_text(time_template % (i*dt))
     return line, time_text
 
